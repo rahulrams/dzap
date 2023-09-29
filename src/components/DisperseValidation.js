@@ -35,10 +35,17 @@ const DisperseValidation = ({ addresses, onRemoveDuplicates }) => {
             <div className="flex-1">Duplicate</div>
             <div className="flex flex-initial justify-items-end px-4">
               <button
-                onClick={onRemoveDuplicates}
+                onClick={() => onRemoveDuplicates(false)}
                 className="text-red-500 w-auto"
               >
                 Keep the first one
+              </button>
+              <span className="text-red-500 px-4"> | </span>
+              <button
+                onClick={() => onRemoveDuplicates(true)}
+                className="text-red-500 w-auto"
+              >
+                Combine Balance
               </button>
             </div>
           </div>

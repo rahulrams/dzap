@@ -14,14 +14,32 @@ const Disperse = () => {
     setValidate(true);
   };
 
-  const removeDuplicates = () => {
-    const seen = new Set();
-    const filteredAddresses = addresses.filter((item, i) => {
-      const duplicate = seen.has(item.address);
-      seen.add(item.address);
-      return !duplicate;
-    });
-    setAddresses(filteredAddresses);
+  const removeDuplicates = (shouldCombineBalance) => {
+    if (shouldCombineBalance) {
+      const filteredAddresses = addresses.reduce((acc, curr) => {
+        const item =
+          acc.length > 0 && acc.find(({ address }) => address === curr.address);
+        if (item) {
+          if (!isNaN(item.amount)) {
+            item.amount = Number(item.amount) + Number(curr.amount);
+          }
+        } else {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
+
+      setAddresses(filteredAddresses);
+    } else {
+      const seen = new Set();
+      const filteredAddresses = addresses.filter((item, i) => {
+        const duplicate = seen.has(item.address);
+        seen.add(item.address);
+        return !duplicate;
+      });
+
+      setAddresses(filteredAddresses);
+    }
   };
 
   useEffect(() => {

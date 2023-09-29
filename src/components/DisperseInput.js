@@ -3,11 +3,11 @@ const DisperseInput = ({ addresses, onUpdate }) => {
     let value = event.target.value;
     onUpdate(
       value.split(/\r\n|\r|\n/).map((o) => {
-        let arr = o.split(/,| |=/);
+        const match = o.match(/(\w+)(,| |=)(\w+)/);
         return {
-          value: o,
-          address: arr[0],
-          amount: arr.length > 1 ? arr[1] : null,
+          address: match[1],
+          separator: match[2],
+          amount: match[3],
         };
       })
     );
@@ -40,7 +40,12 @@ const DisperseInput = ({ addresses, onUpdate }) => {
             }
             onChange={onInputChange}
             rows={9}
-            value={addresses.map((address) => address.value).join("\r\n")}
+            value={addresses
+              .map(
+                ({ address, separator, amount }) =>
+                  `${address}${separator}${amount}`
+              )
+              .join("\r\n")}
           ></textarea>
         </div>
       </div>
